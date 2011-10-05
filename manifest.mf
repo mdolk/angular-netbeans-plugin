@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module: com.github.mdolk.ng.netbeans
 OpenIDE-Module-Localizing-Bundle: com/github/mdolk/ng/netbeans/Bundle.properties
-OpenIDE-Module-Specification-Version: 0.1
+OpenIDE-Module-Specification-Version: 0.2
 
