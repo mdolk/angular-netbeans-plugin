@@ -1,8 +1,10 @@
 package com.github.mdolk.ng.netbeans.codecompletion;
 
+import com.petebevin.markdown.MarkdownProcessor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.Action;
@@ -49,19 +51,22 @@ public class NgHtmlCompletionDocumentation implements CompletionDocumentation {
 		List<String> params = ngDoc.getMultilineAttributes("@param");
 		if (!params.isEmpty()) {
 			sb.append("<h2>Parameters</h2>");
-			sb.append("<ul>");
+			sb.append("<table>");
 			for (String param : params) {
 				String[] split = param.split(" ", 3);
 				String type = split[0];
 				String name = split[1];
 				String desc = split[2];
-				sb.append("<li>")
-				.append("<tt>").append(name).append("</tt>").append(" - ")
-				.append("<tt>").append(type).append("</tt>").append(" : ")
-				.append(format(desc))
-				.append("</li>");
+				sb.append("<tr valign=top>");
+				sb.append("<td>&bull;</td>");
+				sb.append("<td><tt>").append(name).append("</tt></td>");
+				sb.append("<td>&mdash;</td>");
+				sb.append("<td><tt>").append(type).append("</tt></td>");
+				sb.append("<td>&mdash;</td>");
+				sb.append("<td>").append(format(desc)).append("</td>");
+				sb.append("</tr>");
 			}
-			sb.append("</ul>");
+			sb.append("</table>");
 		}
 	}
 
@@ -79,31 +84,40 @@ public class NgHtmlCompletionDocumentation implements CompletionDocumentation {
 				Pattern pattern = Pattern.compile("<doc:source.*?>(.*?)</doc:source>", Pattern.DOTALL);
 				Matcher matcher = pattern.matcher(example);
 				if (matcher.find()) {
-					sb.append("<hr><pre>");
+					sb.append("<pre>");
 					sb.append(matcher.group(1).replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
-					sb.append("</pre><hr>");
+					sb.append("</pre>");
 				}
 			}
 		}
 	}
 
-	private static String format(String ngDocMarkup) {
-		// TODO : Format bullet lists
+	private static String format(String text) {
+		// Escape HTML tags in pre blocks
+		Scanner scanner = new Scanner(text).useDelimiter("</?pre>");
+		boolean isPre = false;
 		StringBuilder sb = new StringBuilder();
-		String[] paragraphs = ngDocMarkup.split("\\n[ \\t]*\\n");
-		for (String paragraph : paragraphs) {
-			sb.append("<p>");
-			sb.append(paragraph
-				.replaceAll("<", "&lt;")
-				.replaceAll(">", "&gt;")
-				.replaceAll("`(.*?)`", "<tt>$1</tt>") // monospace font
-				.replaceAll("\\{@link (\\S)+([^\\}]+)\\}", "<i>$2</i>") // display links in italic
-				.replaceAll("(?s)&lt;pre&gt;(.*?)&lt;/pre&gt;", "<pre>$1</pre>") // keep <pre> tags
-				.replaceAll("(?:^|\\n)# (.*)\\n", "<h3>$1</h3>") // # headers
-			);
-			sb.append("</p>");
+		while (scanner.hasNext()) {
+			String group = scanner.next();
+			if (isPre) {
+				sb
+				.append("<pre>")
+				.append(group.replaceAll("<", "&lt;").replaceAll(">", "&gt;"))
+				.append("</pre>");
+			} else {
+				sb.append(group);
+			}
+			isPre = !isPre;
 		}
-		return sb.toString();
+		text = sb.toString();
+
+		// Minor tweaks
+		text = text.replaceAll("\\{@link\\s+([^\\s\\}]+)\\s*([^\\}]*?)\\s*}", "_$2_"); // display links in italic
+		text = text.replaceAll("<angular/>", "<tt>&lt;angular/&gt;</tt>");
+
+		// Markdown format the rest
+		MarkdownProcessor mp = new MarkdownProcessor();
+		return mp.markdown(text);
 	}
 
 	@Override

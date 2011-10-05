@@ -81,6 +81,10 @@
                 </test-type>
             </test-dependencies>
             <public-packages/>
+            <class-path-extension>
+                <runtime-relative-path>ext/markdownj-core-0.4.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/markdownj-core-0.4.1.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>
