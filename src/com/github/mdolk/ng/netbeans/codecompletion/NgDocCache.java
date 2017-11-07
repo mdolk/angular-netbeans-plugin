@@ -16,7 +16,7 @@ import org.openide.filesystems.FileUtil;
 import org.openide.util.Exceptions;
 
 public class NgDocCache {
-	private final Map<String, List<NgDoc>> cache = new HashMap<String, List<NgDoc>>();
+	private final Map<String, List<NgDoc>> cache = new HashMap<>();
 
 	public NgDocCache() {
 		FileUtil.addFileChangeListener(new UpdateCacheWhenJsFileChangedListener());
@@ -65,7 +65,7 @@ public class NgDocCache {
 
 	private static List<NgDoc> readProjectNgDocsFromFiles(Project project) {
 		List<FileObject> jsFiles = NgUtils.findByMimeType(project.getProjectDirectory(), "text/javascript");
-		List<NgDoc> result = new ArrayList<NgDoc>();
+		List<NgDoc> result = new ArrayList<>();
 		for (FileObject jsFile : jsFiles) {
 			System.out.println(" -- " + jsFile.getPath());
 			try {

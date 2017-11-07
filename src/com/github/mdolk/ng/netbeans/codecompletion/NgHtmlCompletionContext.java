@@ -47,7 +47,7 @@ public class NgHtmlCompletionContext {
 
 	private int lookLeftUntil(Character... lookFor) {
 		Character[] l = lookFor;
-		HashSet<Character> set = new HashSet<Character>(Arrays.asList(l));
+		HashSet<Character> set = new HashSet<>(Arrays.asList(l));
 		int offset = caretOffset - 1;
 		try {
 			while (offset >= 0 && !set.contains(charAt(offset))) {

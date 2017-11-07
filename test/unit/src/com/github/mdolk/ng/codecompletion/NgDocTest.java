@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class NgDocTest {
-	private static String DOC =
+	private static final String DOC =
 		"/**\n" +
 		" * @workInProgress\n" +
 		" * @ngdoc directive\n" +
