@@ -35,7 +35,7 @@ public class NgHtmlCompletionProvider implements CompletionProvider {
 					return;
 				}
 				String filter = ctx.getFilter();
-				Set<String> added = new HashSet<String>();
+				Set<String> added = new HashSet<>();
 				for (NgDoc ngDoc : getNgDocs()) {
 					String type = ngDoc.getAttribute("@ngdoc");
 					String name = ngDoc.getAttribute("@name");

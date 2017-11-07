@@ -13,7 +13,7 @@ public class NgUtils {
 		if (!root.isFolder()) {
 			throw new IllegalArgumentException("Not a folder");
 		}
-		List<FileObject> result = new ArrayList<FileObject>();
+		List<FileObject> result = new ArrayList<>();
 		Enumeration<? extends FileObject> children = root.getChildren(true);
 		while (children.hasMoreElements()) {
 			FileObject file = children.nextElement();
@@ -30,7 +30,7 @@ public class NgUtils {
 	public static List<String> getDocComments(String s) {
 		Pattern pattern = Pattern.compile("/\\*\\*.*?\\*/", Pattern.DOTALL);
 		Matcher matcher = pattern.matcher(s);
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		while (matcher.find()) {
 			result.add(matcher.group());
 		}
